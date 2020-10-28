@@ -2,7 +2,7 @@ ARG PHP_VERSION=7.2
 
 FROM php:${PHP_VERSION}-fpm-alpine
 
-LABEL maintainer="Samuel Laulhau <sam@lalop.co>, Holger Lösken <holger.loesken@codedge.de>"
+LABEL maintainer="Johannes Engel <jcnengel@gmail.com>"
 
 #####
 # SYSTEM REQUIREMENT
