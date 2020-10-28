@@ -67,6 +67,11 @@ RUN curl -s -o /tmp/ninja.zip -SL https://github.com/invoiceninja/invoiceninja/a
     && chmod -R 755 /var/www/app/storage  \
     && rm -rf /var/www/app/docs /var/www/app/tests
 
+# Install requirements
+RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin \
+        --filename=composer; \
+        composer install --no-dev --no-suggest --no-progress
+
 # Override the environment settings from projects .env file
 ENV LOG errorlog
 ENV SELF_UPDATER_SOURCE ''
