@@ -71,8 +71,6 @@ RUN curl -s -o /tmp/ninja.zip -SL https://github.com/invoiceninja/invoiceninja/a
     && chmod -R 755 /var/www/app/storage  \
     && rm -rf /var/www/app/docs /var/www/app/tests
 
-VOLUME /var/www/app/vendor
-
 # Import composer packages from last released version
 RUN mv /var/www/app/composer.json /var/www/app/composer.json.master \
     && mv /var/www/app/composer.lock /var/www/app/composer.lock.master \
