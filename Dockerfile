@@ -52,6 +52,10 @@ RUN addgroup -S "$IN_USER" && \
     addgroup "$IN_USER" www-data; \
     chown -R "$IN_USER":"$IN_USER" .
 
+# Install requirements
+RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin \
+        --filename=composer;
+
 USER $IN_USER
 
 # Download and install IN
@@ -66,10 +70,6 @@ RUN curl -s -o /tmp/ninja.zip -SL https://github.com/invoiceninja/invoiceninja/a
     && cp /var/www/app/.env.example /var/www/app/.env \
     && chmod -R 755 /var/www/app/storage  \
     && rm -rf /var/www/app/docs /var/www/app/tests
-
-# Install requirements
-RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin \
-        --filename=composer;
 
 VOLUME /var/www/app/vendor
 
