@@ -68,13 +68,10 @@ RUN curl -s -o /tmp/ninja.zip -SL https://github.com/invoiceninja/invoiceninja/a
     && rm -rf /var/www/app/docs /var/www/app/tests
 
 # Install requirements
-COPY ./vendor.zip /tmp/vendor.zip \
-    && bsdtar -C /var/www/app -xf /tmp/vendor.zip \
-    && rm /tmp/vendor.zip
-    
 RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin \
-        --filename=composer; \
-        composer install --no-dev --no-suggest --no-progress
+        --filename=composer;
+
+VOLUME /var/www/app/vendor
 
 # Override the environment settings from projects .env file
 ENV LOG errorlog
