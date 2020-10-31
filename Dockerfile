@@ -73,6 +73,13 @@ RUN curl -s -o /tmp/ninja.zip -SL https://github.com/invoiceninja/invoiceninja/a
 
 VOLUME /var/www/app/vendor
 
+# Import composer packages from last released version
+RUN mv /var/www/app/composer.json /var/www/app/composer.json.master \
+    && mv /var/www/app/composer.lock /var/www/app/composer.lock.master \
+    && curl -s -o /tmp/ninja-$INVOICENINJA_VERSION.zip -SL https://download.invoiceninja.com \
+    && bsdtar --strip-components=1 -C /var/www/app -xkf /tmp/ninja-$INVOICENINJA_VERSION.zip \
+    && rm /tmp/ninja-$INVOICENINJA_VERSION.zip
+
 # Override the environment settings from projects .env file
 ENV LOG errorlog
 ENV SELF_UPDATER_SOURCE ''
