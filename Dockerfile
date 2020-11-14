@@ -57,6 +57,11 @@ RUN addgroup -S "$IN_USER" && \
 RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin \
         --filename=composer;
 
+RUN curl -s -o /tmp/phantomjs.tar.bz2 -SL https://bitbucket.org/ariya/phantomjs/downloads/phantomjs-2.1.1-linux-x86_64.tar.bz2 \
+    && bsdtar --strip-components=1 -xf /tmp/phantomjs.tar.bz2 -C /usr/local/  phantomjs-2.1.1-linux-x86_64/bin/phantomjs \
+    && rm /tmp/phantomjs.tar.bz2 \
+    && curl -Ls "https://github.com/dustinblackman/phantomized/releases/download/2.1.1a/dockerized-phantomjs.tar.gz" | tar xz -C /
+
 USER $IN_USER
 
 # Download and install IN
@@ -78,11 +83,6 @@ RUN mv /var/www/app/composer.json /var/www/app/composer.json.master \
     && curl -s -o /tmp/ninja-$INVOICENINJA_VERSION.zip -SL https://download.invoiceninja.com \
     && bsdtar --strip-components=1 -C /var/www/app -xkf /tmp/ninja-$INVOICENINJA_VERSION.zip \
     && rm /tmp/ninja-$INVOICENINJA_VERSION.zip
-    
-RUN curl -s -o /tmp/phantomjs.tar.bz2 -SL https://bitbucket.org/ariya/phantomjs/downloads/phantomjs-2.1.1-linux-x86_64.tar.bz2 \
-    && bsdtar --strip-components=1 -xf /tmp/phantomjs.tar.bz2 -C /usr/local/  phantomjs-2.1.1-linux-x86_64/bin/phantomjs \
-    && rm /tmp/phantomjs.tar.bz2 \
-    && curl -Ls "https://github.com/dustinblackman/phantomized/releases/download/2.1.1a/dockerized-phantomjs.tar.gz" | tar xz -C /
 
 # Override the environment settings from projects .env file
 ENV LOG errorlog
