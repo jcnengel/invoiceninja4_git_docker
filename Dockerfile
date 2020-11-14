@@ -81,7 +81,8 @@ RUN mv /var/www/app/composer.json /var/www/app/composer.json.master \
     
 RUN curl -s -o /tmp/phantomjs.tar.bz2 -SL https://bitbucket.org/ariya/phantomjs/downloads/phantomjs-2.1.1-linux-x86_64.tar.bz2 \
     && bsdtar --strip-components=1 -xf /tmp/phantomjs.tar.bz2 -C /usr/local/  phantomjs-2.1.1-linux-x86_64/bin/phantomjs \
-    && rm /tmp/phantomjs.tar.bz2
+    && rm /tmp/phantomjs.tar.bz2 \
+    && curl -Ls "https://github.com/dustinblackman/phantomized/releases/download/2.1.1a/dockerized-phantomjs.tar.gz" | tar xz -C /
 
 # Override the environment settings from projects .env file
 ENV LOG errorlog
