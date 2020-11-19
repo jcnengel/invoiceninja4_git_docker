@@ -39,6 +39,15 @@ RUN docker-php-ext-configure gd --with-jpeg-dir=/usr/include/ --with-png-dir=/us
 COPY ./config/php/php.ini /usr/local/etc/php/php.ini
 COPY ./config/php/php-cli.ini /usr/local/etc/php/php-cli.ini
 
+# Install requirements
+RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin \
+        --filename=composer;
+
+RUN curl -s -o /tmp/phantomjs.tar.bz2 -SL https://bitbucket.org/ariya/phantomjs/downloads/phantomjs-2.1.1-linux-x86_64.tar.bz2 \
+    && bsdtar --strip-components=1 -xf /tmp/phantomjs.tar.bz2 -C /usr/local/  phantomjs-2.1.1-linux-x86_64/bin/phantomjs \
+    && rm /tmp/phantomjs.tar.bz2 \
+    && curl -Ls "https://github.com/dustinblackman/phantomized/releases/download/2.1.1a/dockerized-phantomjs.tar.gz" | tar xz -C /
+
 # Separate user
 ENV IN_USER=invoiceninja
 
@@ -52,15 +61,6 @@ RUN addgroup -S "$IN_USER" && \
     "$IN_USER"; \
     addgroup "$IN_USER" www-data; \
     chown -R "$IN_USER":"$IN_USER" .
-
-# Install requirements
-RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin \
-        --filename=composer;
-
-RUN curl -s -o /tmp/phantomjs.tar.bz2 -SL https://bitbucket.org/ariya/phantomjs/downloads/phantomjs-2.1.1-linux-x86_64.tar.bz2 \
-    && bsdtar --strip-components=1 -xf /tmp/phantomjs.tar.bz2 -C /usr/local/  phantomjs-2.1.1-linux-x86_64/bin/phantomjs \
-    && rm /tmp/phantomjs.tar.bz2 \
-    && curl -Ls "https://github.com/dustinblackman/phantomized/releases/download/2.1.1a/dockerized-phantomjs.tar.gz" | tar xz -C /
 
 USER $IN_USER
 
