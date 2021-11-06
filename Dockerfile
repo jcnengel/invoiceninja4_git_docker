@@ -1,4 +1,4 @@
-ARG PHP_VERSION=7.2
+ARG PHP_VERSION=7.4
 
 FROM php:${PHP_VERSION}-fpm-alpine
 
@@ -7,7 +7,7 @@ LABEL maintainer="Johannes Engel <jcnengel@gmail.com>"
 #####
 # SYSTEM REQUIREMENT
 #####
-ARG INVOICENINJA_VERSION
+ARG INVOICENINJA_VERSION=4.5.46
 WORKDIR /var/www/app
 
 COPY entrypoint.sh /usr/local/bin/docker-entrypoint
@@ -15,13 +15,14 @@ RUN chmod +x /usr/local/bin/docker-entrypoint
 
 RUN set -eux; \
     apk add --no-cache \
-    gmp-dev \
-    freetype-dev \
+    gmp-dev gmp \
+    freetype-dev freetype \
     libarchive-tools \
-    libjpeg-turbo-dev \
-    libpng-dev \
-    libwebp-dev\ 
-    libzip-dev \
+    libjpeg-turbo-dev libjpeg-turbo \
+    libpng-dev libpng \
+    libwebp-dev libwebp \ 
+    libzip-dev libzip \
+    oniguruma-dev oniguruma \
     fontconfig
 
 RUN docker-php-ext-configure gd --with-jpeg-dir=/usr/include/ --with-png-dir=/usr/include --with-webp-dir=/usr/include --with-freetype-dir=/usr/include/; \
@@ -34,7 +35,8 @@ RUN docker-php-ext-configure gd --with-jpeg-dir=/usr/include/ --with-png-dir=/us
        opcache \
        pdo \
        pdo_mysql \
-       zip
+       zip && \
+    apk del gmp-dev freetype-dev libjpeg-turbo-dev libpng-dev libwebp-dev libzip-dev oniguruma-dev
 
 COPY ./config/php/php.ini /usr/local/etc/php/php.ini
 COPY ./config/php/php-cli.ini /usr/local/etc/php/php-cli.ini
